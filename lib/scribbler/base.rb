@@ -15,11 +15,14 @@ module Scribbler
       Scribbler::Configurator
     end
 
+    #TODO Allow this to be manually defined
     def self.include_in_application
-      begin
-        Rails.application.class.parent.send :include, Includeables
-      rescue NameError
-        nil
+      if config.application_include
+        begin
+          ::Rails.application.class.parent.send :include, Includeables
+        rescue NameError
+          nil
+        end
       end
     end
   end
