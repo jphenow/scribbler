@@ -11,4 +11,17 @@ RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
+  config.color = true
+end
+
+def example_yaml
+  get_support_file('scribbler_example.yml')
+end
+
+def example_init
+  get_support_file('scribbler_example.rb')
+end
+
+def get_support_file(filename)
+  File.expand_path(File.join(File.dirname(__FILE__), 'support', filename))
 end
