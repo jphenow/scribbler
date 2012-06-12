@@ -20,10 +20,7 @@ module Scribbler
     end
 
     def self.application_include
-      if @application_include.nil?
-        @application_include = yaml_config[:application_include] || false
-      end
-      @application_include
+      @application_include ||= false
     end
 
     def self.yaml_config_path
