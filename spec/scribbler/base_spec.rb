@@ -42,10 +42,8 @@ module Scribbler
       it "sets some config variables" do
         subject.configure do
           config.application_include = true
-          config.yaml_config_path = '/some/other/path'
         end
         subject.config.application_include.should be_true
-        subject.config.yaml_config_path.should == '/some/other/path'
       end
     end
   end
