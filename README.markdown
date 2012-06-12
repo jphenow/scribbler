@@ -19,7 +19,7 @@ to your Gemfile and
 
 Then
 
-    rake scribbler:install
+    rake scribbler:install # THIS DOESN'T WORK YET
 
 You'll find your configuration options in `config/initializers/scribbler.rb`.
 As an example, with this configuration file in a Rails app called `Blogger`:
