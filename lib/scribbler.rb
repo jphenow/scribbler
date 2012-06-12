@@ -1,0 +1,5 @@
+require 'active_support/all'
+require 'scribbler/version'
+require 'scribbler/configurator'
+require 'scribbler/base'
+require 'scribbler/includeables'

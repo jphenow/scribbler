@@ -1,0 +1,6 @@
+application_include: true
+logs:
+  subseason: subseason_copy_structure
+  site_hole: site_holes
+  page_destroy: page_destroy
+  registration_email: registration_email

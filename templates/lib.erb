@@ -1,0 +1,41 @@
+module Automation
+  module Scripts
+    class <%= class_name %>
+      include Base
+
+      def self.invoke(*args)
+        options = parse_options(*args)
+
+        # your code here
+      end
+
+      def self.parse_options(*args)
+        options = {}
+
+        parser = Base.default_option_parser(config)
+
+        # any additional flags go here
+        # parser.on("-i") do
+        #   # do something
+        # end
+        #
+        # or options with values
+        # parser.on("--foo BAR") do |bar|
+        #   # do something with the value bar
+        # end
+
+        executable_name = File.basename($PROGRAM_NAME)
+        parser.banner = "Usage: #{executable_name} [options]
+
+Description of what the script does
+
+"
+
+        parser.parse!(args)
+
+        options
+      end
+    end
+  end
+end
+
