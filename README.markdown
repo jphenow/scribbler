@@ -26,7 +26,7 @@ As an example, with this configuration file in a Rails app called `Blogger`:
 
     Scribbler::Base.configure do
       config.application_include = true
-      config.logs %w[production delayed_job]
+      config.logs = %w[production delayed_job]
     end
 
 You are given a few methods for free. To get the production logfile location:
