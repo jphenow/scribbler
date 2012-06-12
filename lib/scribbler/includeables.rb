@@ -25,8 +25,8 @@ module Scribbler
         #   # => #<Pathname:/path_to_ngin/log/subseason_copy_structure.log>
         #
         # Returns Pathname to log
-        Scribbler::Base.config.logs.each do |key, value|
-          define_singleton_method "#{key}_log_location" do
+        Scribbler::Base.config.logs.each do |value|
+          define_singleton_method "#{value}_log_location" do
             Rails.root.join('log', "#{value}.log")
             #TODO remove dependence on Rails here
           end
