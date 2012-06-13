@@ -7,10 +7,7 @@ class ScribblerExecutable < Thor
   desc "install", "Installs the necessary files for Scribbler (default: config/initializers/scribbler.rb)"
   method_option :path, :aliases => "-p", :desc => "Specify a different path for the scribbler initialization"
   def install
-    gem_path = ::Scribbler::Base.gem_path
-    default_install_path = gem_path.join('templates', 'scribbler.rb')
-    #install_path = options[:path] || 
-    puts "Installing from #{default_install_path}"
+    Scribbler::Executable.install(options)
   end
 end
 
