@@ -3,6 +3,10 @@ module Scribbler
   delegate :configure, :to => :Base
   delegate :log, :to => :Base
   class Base
+    def self.gem_path
+      File.join(File.expand_path(File.dirname(__FILE__)), '..'))
+    end
+
     def self.configure(&block)
       class_eval(&block)
       Base.include_in_application

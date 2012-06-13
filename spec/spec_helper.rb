@@ -14,10 +14,6 @@ RSpec.configure do |config|
   config.color = true
 end
 
-def example_yaml
-  get_support_file('scribbler_example.yml')
-end
-
 def example_init
   get_support_file('scribbler_example.rb')
 end
