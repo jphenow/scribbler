@@ -1,5 +1,15 @@
 module Scribbler
   class BaseIncluder # I don't love this
+    # Wonky way of allowing Base to include the Includeables.
+    # Receives require errors with this currently.
+    #
+    # Examples:
+    #
+    #   BaseIncluder.include_includeables
+    #   # => Nothing
+    #
+    # Returns Nothing
+    # TODO Rework; there must be a more sane way of including these
     def self.include_includeables
       Scribbler::Base.send :include, Scribbler::Includeables
     end
