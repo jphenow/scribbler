@@ -60,8 +60,8 @@ More importantly you're given access to a sweet `log` method:
 
 ## Todo
 
-* Finish making `rake scribbler:install` copy some initial template files
 * More options in configure
 * More testing
+  - Specifically New executable and cli stuff
 * Make block available in log method for better extensibility
 * Currently attempts to notify NewRelic if its there, abstract and allow custom services
