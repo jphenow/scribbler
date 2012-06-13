@@ -1,6 +1,6 @@
 # Scribbler
 
-{<img src="https://secure.travis-ci.org/jphenow/scribbler.png" />}[http://travis-ci.org/jphenow/scribbler]
+[![TravisCI](https://secure.travis-ci.org/jphenow/scribbler.png "TravisCI")](http://travis-ci.org/jphenow/scribbler "Travis-CI Scribbler")
 
 Scribbler is a little utility for simplifying logging across one application or more.
 Currently it assists in:
