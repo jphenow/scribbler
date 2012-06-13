@@ -17,12 +17,12 @@ module Scribbler
 
     describe "application_include" do
       it "get default" do
-        subject.application_include.should == true
+        subject.application_include.should == false
       end
 
       it "should let me set it" do
-        subject.application_include = false
-        subject.application_include.should == false
+        subject.application_include = true
+        subject.application_include.should == true
       end
     end
   end
