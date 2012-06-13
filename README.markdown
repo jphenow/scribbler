@@ -1,5 +1,7 @@
 # Scribbler
 
+{<img src="https://secure.travis-ci.org/jphenow/scribbler.png" />}[http://travis-ci.org/jphenow/scribbler]
+
 Scribbler is a little utility for simplifying logging across one application or more.
 Currently it assists in:
 
