@@ -6,18 +6,24 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'scribbler'
 require 'ap'
+require 'active_support/inflector'
+require 'active_support/concern'
+Dir.glob(File.expand_path('../support/lib/**/*.rb', __FILE__)).each { |file| require file }
+include SpecUtils
 
+singletons = %w[Base CLI Configurator Executable]
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   config.color = true
-end
-
-def example_init
-  get_support_file('scribbler_example.rb')
-end
-
-def get_support_file(filename)
-  File.expand_path(File.join(File.dirname(__FILE__), 'support', filename))
+  config.after(:all) do # Force a reset of some Classes
+    project_dir = ENV['BUNDLE_GEMFILE'].split('/')
+    project_dir.delete_at(-1)
+    project_dir = project_dir.join('/')
+    singletons.each do |s|
+      Scribbler.send(:remove_const, s)
+      load "#{project_dir}/lib/scribbler/#{s.downcase}.rb"
+    end
+  end
 end
