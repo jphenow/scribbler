@@ -8,7 +8,7 @@ module Scribbler
         subject.logs = nil
       end
 
-      it "should let me set it" do
+      it "lets me set logs" do
         new_logs = %w{1 2}
         subject.logs = new_logs
         subject.logs.should == new_logs

@@ -3,7 +3,7 @@ module Scribbler
     # Run a shell command and output clean text explaining what happened
     #
     # command   - Shell command to run
-    # options   - Set of options to alter default behavior
+    # poptions   - Set of options to alter default behavior
     #           :output - Disable default out of the command (default: true)
     #
     # Examples:
