@@ -2,6 +2,8 @@
 
 [![TravisCI](https://secure.travis-ci.org/jphenow/scribbler.png "TravisCI")](http://travis-ci.org/jphenow/scribbler "Travis-CI Scribbler")
 
+[RubyGems](https://rubygems.org/gems/scribbler)
+
 Scribbler is a little utility for simplifying logging across one application or more.
 Currently it assists in:
 
@@ -63,7 +65,5 @@ More importantly you're given access to a sweet `log` method:
 ## Todo
 
 * More options in configure
-* More testing
-  - Specifically New executable and cli stuff
 * Make block available in log method for better extensibility
 * Currently attempts to notify NewRelic if its there, abstract and allow custom services
