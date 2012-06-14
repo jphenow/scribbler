@@ -22,7 +22,7 @@ module Scribbler
     # Returns the backtick return of the command
     def self.run_command(command, poptions={})
       options = {:output => true}.merge(poptions)
-      output command unless options[:output]
+      output command if options[:output]
       `#{command}`
     end
 

@@ -9,7 +9,7 @@ module Scribbler
     end
 
     def self.application_include
-      @application_include ||= false
+      @application_include || false
     end
   end
 end
