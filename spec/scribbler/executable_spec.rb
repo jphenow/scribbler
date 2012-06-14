@@ -10,9 +10,11 @@ module Scribbler
         subject.install
       end
 
-      #TODO
+      let(:custom_path) { '/some/custom/path' }
       it 'runs changes install path with given option' do
-        #subject.install
+        CLI.should_receive(:run_command).with("mkdir -p #{custom_path}")
+        CLI.should_receive(:mass_copy).with(Base.templates, custom_path)
+        subject.install :path => custom_path
       end
     end
   end
