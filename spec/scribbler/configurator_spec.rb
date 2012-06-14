@@ -4,10 +4,6 @@ module Scribbler
   describe Configurator do
     subject { Configurator }
     describe "logs" do
-      before :each do
-        subject.logs = nil
-      end
-
       it "lets me set logs" do
         new_logs = %w{1 2}
         subject.logs = new_logs
