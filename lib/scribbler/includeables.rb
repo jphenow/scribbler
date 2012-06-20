@@ -78,8 +78,9 @@ module Scribbler
 
         #if File.exists?(real_location) and options[:message].present?
         if options[:message].present?
+          message = options[:message].strip_heredoc
           log = File.open(real_location, 'a')
-          log.puts options[:message]
+          log.puts message
           log.close
         end
       end
