@@ -23,14 +23,27 @@ to your Gemfile and
 
 Then
 
-    rake scribbler:install # THIS DOESN'T WORK YET
+    scribbler install # For options do `scribbler` first
 
 You'll find your configuration options in `config/initializers/scribbler.rb`.
-As an example, with this configuration file in a Rails app called `Blogger`:
+As an example, with this configuration file in a Rails app called `Blogger`: {#config}
 
     Scribbler::Base.configure do
       config.application_include = true
+
+      # config.log_directory = File.new '/a/better/path'
+
       config.logs = %w[production delayed_job]
+
+      config.use_template_by_default = true # Default: false
+
+      # config.template = proc do |options|
+      #   <<-MSG
+      #   ##########
+      #   Cool template bro!
+      #   Message: #{options[:message]}
+      #   MSG
+      # end
     end
 
 You are given a few methods for free. To get the production logfile location:
@@ -62,8 +75,13 @@ More importantly you're given access to a sweet `log` method:
     Blogger.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
     Scribbler::Base.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
 
+With the template enabled (either during call to log [:template => true] or by setting to
+be used by default) you will have each log entry wrapped into a template to pretty-up and
+get some more boilerplate data. As you can see in the (config)[#config] above. See method
+docs and specs for more information.
+
 ## Todo
 
-* More options in configure
-* Make block available in log method for better extensibility
+* Configure the module/class receiving the include
+* Configurable notification gem (NewRelic, Airbrake, etc.)
 * Currently attempts to notify NewRelic if its there, abstract and allow custom services
