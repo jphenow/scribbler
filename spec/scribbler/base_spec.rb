@@ -6,6 +6,7 @@ module Scribbler
 
     before :each do
       Object.send :remove_const, :Rails if defined?(Rails) == 'constant' && Rails.class == Class
+      Time.stub :now => "now"
     end
 
     it "should give me a configurator" do
@@ -44,6 +45,54 @@ module Scribbler
           config.application_include = true
         end
         subject.config.application_include.should be_true
+      end
+    end
+
+    describe "build with template" do
+      let(:some_object) { stub(:id => "no id", :class => stub(:name => "SomeObject")) }
+      before :each do
+        subject.configure do
+          config.application_include = false
+        end
+      end
+
+      it "calls log and gets message with template wrapper" do
+        Scribbler::Base.send(:build_with_template,
+                             :object => some_object,
+                             :template => true,
+                             :message => <<-MSG
+        test
+        123
+        MSG
+                           ).should == <<-MSG.strip_heredoc
+        -------------------------------------------------
+        now
+        SomeObject: no id
+        test
+        123
+
+        MSG
+      end
+
+      it "calls log and gets message with custom params" do
+        Scribbler::Base.send(:build_with_template,
+                             :template => true,
+                             :object => some_object,
+                             :custom_fields => {:test1 => 1, :test2 => 2},
+                             :message => <<-MSG
+        test
+        123
+        MSG
+                           ).should == <<-MSG.strip_heredoc
+        -------------------------------------------------
+        now
+        SomeObject: no id
+        Test1: 1
+        Test2: 2
+        test
+        123
+
+        MSG
       end
     end
   end

@@ -63,26 +63,7 @@ module Scribbler
       #
       # Returns Nothing.
       def log(location, options={})
-        begin
-          NewRelic::Agent.notice_error(options[:error]) if options[:error] and options[:new_relic] != false
-        rescue NameError
-          nil
-        end
-
-        real_location = location
-        if real_location.is_a?(Symbol) or real_location.is_a?(String)
-          real_method = location.to_s + "_log_location"
-          real_location = self.send(real_method) if self.respond_to? real_method
-          real_location = real_location.to_s
-        end
-
-        #if File.exists?(real_location) and options[:message].present?
-        if options[:message].present?
-          message = options[:message].strip_heredoc
-          log = File.open(real_location, 'a')
-          log.puts message
-          log.close
-        end
+        Scribbler::Base.log(location, options)
       end
     end
   end
