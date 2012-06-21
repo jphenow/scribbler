@@ -64,6 +64,7 @@ module Scribbler
       class_eval(&block)
       Base.include_in_application
       BaseIncluder.include_includeables
+      build_methods
     end
 
     # Simply returns the configurator class.

@@ -11,7 +11,7 @@ module Scribbler
     # Returns Nothing
     # TODO Rework; there must be a more sane way of including these
     def self.include_includeables
-      Scribbler::Base.send :include, Scribbler::Includeables
+      Base.send :include, Scribbler::Includeables
     end
   end
 
