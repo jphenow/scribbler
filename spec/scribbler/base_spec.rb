@@ -35,6 +35,7 @@ module Scribbler
     describe "configure" do
       it "kicks off the module and sends includes" do
         subject.should_receive(:include_in_application).once
+        subject.should_receive(:build_methods).once # Twice if we didn't stub below method
         BaseIncluder.should_receive(:include_includeables).once
         subject.configure do
         end
@@ -100,6 +101,56 @@ module Scribbler
         123
 
         MSG
+      end
+    end
+
+    describe "apply to log" do
+      before :each do
+        subject.configure do
+          config.logs = %w[test_log]
+        end
+      end
+
+      it "should not work without location" do
+        subject.apply_to_log(nil, :message => "...").should be_nil
+      end
+
+      it "should not work without message" do
+        subject.should_not_receive :test_log_log_location
+        subject.apply_to_log(:test_log).should be_nil
+      end
+
+      it "should build a template and try to put it in a file" do
+        options = { :message => "..." }
+        subject.should_receive(:send).with "test_log_log_location"
+        subject.should_receive(:build_with_template).with options
+        file_stub = stub
+        file_stub.should_receive :puts
+        file_stub.should_receive :close
+        File.should_receive(:open) { file_stub }
+        subject.apply_to_log :test_log, options
+      end
+    end
+
+    describe "find file at" do
+      it "doesn't find a file method" do
+        # in case we have bad config data lingering
+        subject.stub(:respond_to?).with('test_log_log_location').and_return false
+        subject.should_not_receive(:test_log_log_location)
+        subject.find_file_at(:test_log).should == 'test_log'
+      end
+
+      it "finds a file method defined" do
+        subject.configure do
+          config.logs = %w[test_log]
+        end
+        subject.should_receive(:test_log_log_location).once
+        subject.find_file_at :test_log
+      end
+
+      it "isn't a string or a symbol and just returns the input" do
+        path = Pathname.new '/'
+        subject.find_file_at(path).should be(path)
       end
     end
   end
