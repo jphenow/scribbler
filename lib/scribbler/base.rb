@@ -84,9 +84,11 @@ module Scribbler
     # location  - Either a pathname from the above method or symbol for an above
     #             method
     # options   - Hash of options for logging on Ngin
-    #           :error     - Error object, mostly for passing to NewRelic
-    #           :message   - Message to log in the actual file
-    #           :new_relic - Notify NewRelic of the error (default: true)
+    #           :error            - Error object, mostly for passing to NewRelic
+    #           :message          - Message to log in the actual file
+    #           :custom_fields    - Custom fields dropped into the default template
+    #           :template         - Whether or not to use the template at this log
+    #           :new_relic        - Notify NewRelic of the error (default: true)
     #
     # Examples
     #
@@ -107,30 +109,83 @@ module Scribbler
         nil
       end
 
-      apply_to_log find_file_at(location), options
+      apply_to_log location, options
     end
 
     private
-    #TODO docs
+    # Builds the message and any other options into a string
+    # using the template defined in the configure
+    #
+    # options   - options hash that comprises most of the important log pieces
+    #           :message  - The message we're wrapping into the templater [required]
+    #           :template - Whether or not to use the template method
+    #           **Other option information given in the .log docs
+    #
+    # Examples
+    #
+    #   Base.build_with_template(:message => "...", :template => false)
+    #   # => "..."
+    #
+    #   Base.build_with_template
+    #   # => nil
+    #
+    #   Base.build_with_template(:message => "...", :template => true)
+    #   # => <<-EXAMPLE
+    #     --------------------
+    #     TEMPLATE STUFF
+    #     ....
+    #     EXAMPLE
+    #
+    # Returns nil, a string, or a string built with calling the Configurator.template method
     def self.build_with_template(options={})
       if options[:message].present?
         options[:message] = options[:message].strip_heredoc.rstrip
-        config.template.call(options) if options[:template]
+        options[:template] ? config.template.call(options) : options[:message]
       end
     end
 
-    #TODO docs
-    #TODO tests
+    # Drops built message into the log with the given location
+    #
+    # location    - location either found with Base.*_log_location or by hoping a valid
+    #               path string or Path object were passed
+    # options     - options hash
+    #             :message - Message to be built and put in log file [required]
+    #             ** Other hash information given in Base.log
+    #
+    # Examples
+    #
+    #   Base.apply_to_log :some_loc, :message => "...", :template => false, :error => e
+    #   # => Nothing
+    #
+    # Returns Nothing
+    #
+    # TODO: tests
     def self.apply_to_log(location, options={})
       if options[:message].present?
-        log = File.open(location, 'a')
+        log = File.open(find_file_at(location), 'a')
         log.puts build_with_template(message)
         log.close
       end
     end
 
-    #TODO docs
-    #TODO test
+    # Attempts to turn a symbol or string into the *_log_location method that
+    # was auto-build based on Configurator.logs and finds the file path
+    #
+    # location  - a string or symbol that will be turned into a *_log_location
+    #             method
+    #
+    # Examples
+    #
+    #   Base.find_file_at :a_file
+    #   # => <#Path:...>      # The method `a_file_log_location` exists
+    #
+    #   Base.find_file_at :another_file
+    #   # => :another_file    # The method `another_file_log_location` does not exist
+    #
+    # Returns Nothing
+    #
+    # TODO: test
+    # TODO: allow the log base directory to be set in configurator
     def self.find_file_at(location)
       real_location = location
       if real_location.is_a?(Symbol) or real_location.is_a?(String)
@@ -150,7 +205,8 @@ module Scribbler
     #   # => Nothing
     #
     # Returns Nothing
-    # TODO Allow config to define where we send the include
+    #
+    # TODO: Allow config to define where we send the include
     def self.include_in_application
       if config.application_include
         begin

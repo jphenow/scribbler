@@ -39,6 +39,7 @@ module Scribbler
           define_singleton_method "#{value}_log_location" do
             Rails.root.join('log', "#{value}.log")
             #TODO remove dependence on Rails here
+            #TODO allow configurable root location
           end
         end
       end

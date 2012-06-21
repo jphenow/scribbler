@@ -4,18 +4,104 @@ module Scribbler
       attr_accessor :logs, :application_include, :template, :use_template_by_default
     end
 
+    # List of strings or symbols that represent logs we want methods
+    # generated for
+    #
+    # Default: []
+    #
+    # Examples
+    #
+    # Scribbler::Configurator.logs
+    # # => ['copy', 'destroy']
+    #
+    # Returns list of logs
     def self.logs
       @logs ||= []
     end
 
+    # Boolean used for deciding whether or not Scribbler should
+    # define #*_log_location methods and a .log method in a rails application
+    #
+    # Default: false
+    #
+    # Examples
+    #
+    # Scribbler::Configurator.application_include
+    # # => false
+    #
+    # Returns boolean
+    #
+    # TODO: Allow the class we're sending the include to to be custom
     def self.application_include
       @application_include || false
     end
 
+    # Boolean for deciding if we should use the logger template by
+    # by default when calling Base.log
+    #
+    # Default: false
+    #
+    # Examples
+    #
+    # Scribbler::Configurator.use_template_by_default
+    # # => false
+    #
+    # Returns boolean
     def self.use_template_by_default
-      @use_template_by_default ||= false
+      @use_template_by_default || false
     end
 
+    # The method that sets a template for each log made with
+    # Base.log
+    #
+    # The template proc is given the whole options hash that is
+    # passed through Base.log or YourApplication.log. So if you
+    # had:
+    #
+    #   YourApplication.log :a_log,
+    #                       :message => "information data",
+    #                       :custom => "stuff"
+    #
+    # Then you can assume the template proc will get:
+    #
+    # options = {
+    #   :message => "information data",
+    #   :custom => "stuff"
+    # }
+    #
+    # To set a custom template:
+    #
+    #   Scribbler::Configurator.template = proc do |options|
+    #     "Message: options[:message]"
+    #   end
+    #
+    # From Scribbler::Base.configure that would be:
+    #
+    #   config.template = proc do |options|
+    #     "Message: options[:message]"
+    #   end
+    #
+    # **Keep in mind** that the template can be ignored at any
+    # Base.log call with:
+    #
+    #   Base.log :your_log, :template => false, :message "..."
+    #
+    # Default:
+    #
+    # -------------------------------------------------
+    #
+    # SomeObject: #{id}                                 # options[:object] and options[:object].try(:id)
+    # Custom1: some good info                           # options[:custom_fields] hash
+    # Custom2: some better info                         # Left of colon is the key.humanize, right is the value
+    # OH NO YOU BROKED STUFF                            # options[:message].strip_heredoc
+    # DO PLX FIX                                        #
+    #
+    # Examples
+    #
+    #   Scribbler::Configurator.template
+    #   # => <#Proc:...>
+    #
+    # Returns the proc that wraps around each log entry
     def self.template
       @template ||= proc do |options|
         begin
