@@ -1,7 +1,4 @@
 module Scribbler
-  # TODO not sure this'll work
-  delegate :configure, :to => :Base
-  delegate :log, :to => :Base
   class Base
     # Gets the path of this Gem
     #
