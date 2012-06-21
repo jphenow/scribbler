@@ -56,6 +56,13 @@ module Scribbler
         end
       end
 
+      it "calls log, skips templater and still works" do
+        Scribbler::Base.send(:build_with_template,
+                             :object => some_object,
+                             :template => false,
+                             :message => "test\n123").should == "test\n123"
+      end
+
       it "calls log and gets message with template wrapper" do
         Scribbler::Base.send(:build_with_template,
                              :object => some_object,
