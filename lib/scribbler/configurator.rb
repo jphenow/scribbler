@@ -25,8 +25,7 @@ module Scribbler
         end
         custom_fields = options[:custom_fields].to_a.collect { |x| "#{x[0].to_s.humanize}: #{x[1]}" }.join("\n")
 
-        template = ""
-        template << "-------------------------------------------------\n"
+        template = "-------------------------------------------------\n"
         template << "#{Time.now}\n"
         template << "#{options[:object].class.name}: #{if_id}\n" if options[:object]
         template << "#{custom_fields}\n" if custom_fields.present?
