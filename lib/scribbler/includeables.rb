@@ -37,9 +37,7 @@ module Scribbler
         # Returns Pathname to log
         Scribbler::Base.config.logs.each do |value|
           define_singleton_method "#{value}_log_location" do
-            Rails.root.join('log', "#{value}.log")
-            #TODO remove dependence on Rails here
-            #TODO allow configurable root location
+            File.join Scribbler::Configurator.log_directory, "#{value}.log"
           end
         end
       end

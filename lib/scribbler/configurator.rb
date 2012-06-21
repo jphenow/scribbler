@@ -1,7 +1,25 @@
 module Scribbler
   class Configurator
     class << self
-      attr_accessor :logs, :application_include, :template, :use_template_by_default
+      attr_accessor :logs, :application_include, :template, :use_template_by_default, :log_directory
+    end
+
+    # Provides location for getting the directory Scribbler will place
+    # log files in. Favors RailsApplication/log/ but falls back to
+    # $PWD/log if not set in config
+    #
+    # Examples
+    #
+    #   Configurator.log_directory
+    #   # => "/some/path/to/log/"
+    #
+    # Returns String for log directory location
+    def self.log_directory
+      @log_directory ||= begin
+                           Rails.root.join('log')
+                         rescue NameError
+                           File.join Dir.pwd, 'log'
+                         end
     end
 
     # List of strings or symbols that represent logs we want methods
@@ -102,6 +120,9 @@ module Scribbler
     #   # => <#Proc:...>
     #
     # Returns the proc that wraps around each log entry
+    #
+    # TODO: Block input that would break this
+    # TODO: Test
     def self.template
       @template ||= proc do |options|
         begin
