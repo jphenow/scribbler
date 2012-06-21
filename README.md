@@ -75,6 +75,15 @@ More importantly you're given access to a sweet `log` method:
     Blogger.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
     Scribbler::Base.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
 
+Log options with the default template proc:
+
+    options   - Hash of options for logging on Ngin
+              :error            - Error object, mostly for passing to NewRelic
+              :message          - Message to log in the actual file [REQUIRED]
+              :custom_fields    - Custom fields dropped into the default template
+              :template         - Whether or not to use the template at this log
+              :new_relic        - Notify NewRelic of the error (default: true)
+
 With the template enabled (either during call to log [:template => true] or by setting to
 be used by default) you will have each log entry wrapped into a template to pretty-up and
 get some more boilerplate data. As you can see in the (config)[#config] above. See method
