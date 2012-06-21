@@ -159,12 +159,10 @@ module Scribbler
     #   # => Nothing
     #
     # Returns Nothing
-    #
-    # TODO: tests
     def self.apply_to_log(location, options={})
-      if options[:message].present?
+      if location.present? and options[:message].present?
         log = File.open(find_file_at(location), 'a')
-        log.puts build_with_template(message)
+        log.puts build_with_template(options)
         log.close
       end
     end
@@ -185,16 +183,13 @@ module Scribbler
     #
     # Returns Nothing
     #
-    # TODO: test
     # TODO: allow the log base directory to be set in configurator
     def self.find_file_at(location)
-      real_location = location
-      if real_location.is_a?(Symbol) or real_location.is_a?(String)
+      if location.is_a?(Symbol) or location.is_a?(String)
         real_method = location.to_s + "_log_location"
-        real_location = self.send(real_method) if self.respond_to? real_method
-        real_location = real_location.to_s
+        location = respond_to?(real_method) ? send(real_method) : location.to_s
       end
-      real_location
+      location
     end
 
     # If the config agrees, attempt to include our special methods
