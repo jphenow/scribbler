@@ -107,7 +107,6 @@ module Scribbler
     # Default:
     #
     # -------------------------------------------------
-    #
     # SomeObject: #{id}                                 # options[:object] and options[:object].try(:id)
     # Custom1: some good info                           # options[:custom_fields] hash
     # Custom2: some better info                         # Left of colon is the key.humanize, right is the value
