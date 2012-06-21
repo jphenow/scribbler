@@ -125,9 +125,9 @@ module Scribbler
     def self.template
       @template ||= proc do |options|
         begin
-          if_id = options[:object].id
-        rescue NoMethodError
-          if_id = "no id"
+          if_id = options[:object].present? ? options[:object].try(:id) : 'no id'
+        rescue NoMethodError, RuntimeError # Uber careful
+          if_id = 'no id'
         end
         custom_fields = options[:custom_fields].to_a.collect { |x| "#{x[0].to_s.humanize}: #{x[1]}" }.join("\n")
 
