@@ -26,6 +26,7 @@ Then
     scribbler install # For options do `scribbler` first
 
 You'll find your configuration options in `config/initializers/scribbler.rb`.
+**Better, more documented examples in the template file provided by `scribbler install`**
 As an example, with this configuration file in a Rails app called `Blogger`: {#config}
 
     Scribbler::Base.configure do
