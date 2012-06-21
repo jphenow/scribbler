@@ -15,7 +15,7 @@ Currently it assists in:
 
 In your Rails project add
 
-    gem scribbler
+    gem 'scribbler'
 
 to your Gemfile and
 
