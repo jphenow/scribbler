@@ -135,7 +135,8 @@ module Scribbler
         # in case we have bad config data lingering
         subject.stub(:respond_to?).with('test_log_log_location').and_return false
         subject.should_not_receive(:test_log_log_location)
-        subject.find_file_at(:test_log).should == "#{Dir.pwd}/log/test_log"
+        Rails.should_receive(:root).and_raise(NameError)
+        subject.find_file_at(:test_log).should == "#{subject.config.log_directory}/test_log"
       end
 
       it "finds a file method defined" do
