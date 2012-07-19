@@ -18,9 +18,7 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.color = true
   config.after(:all) do # Force a reset of some Classes
-    project_dir = ENV['BUNDLE_GEMFILE'].split('/')
-    project_dir.delete_at(-1)
-    project_dir = project_dir.join('/')
+    project_dir = File.expand_path('../..', __FILE__)
     singletons.each do |s|
       Scribbler.send(:remove_const, s)
       load "#{project_dir}/lib/scribbler/#{s.downcase}.rb"

@@ -31,10 +31,9 @@ module Scribbler
       end
 
       it "falls back to pwd/log without rails" do
-        dir = "dir/"
+        subject.log_directory = nil #RESET
         Rails.should_receive(:root).and_raise(NameError)
-        Dir.should_receive(:pwd).and_return('dir')
-        subject.log_directory.should == 'dir/log'
+        subject.log_directory.should == "#{Dir.pwd}/log"
       end
 
       it "sets the log directory" do

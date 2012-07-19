@@ -122,12 +122,10 @@ module Scribbler
 
       it "should build a template and try to put it in a file" do
         options = { :message => "..." }
-        subject.should_receive(:send).with "test_log_log_location"
+        file = mock(:puts => true)
         subject.should_receive(:build_with_template).with options
-        file_stub = stub
-        file_stub.should_receive :puts
-        file_stub.should_receive :close
-        File.should_receive(:open) { file_stub }
+        subject.should_receive(:send).with "test_log_log_location"
+        File.should_receive(:open).and_yield(file)
         subject.apply_to_log :test_log, options
       end
     end
@@ -137,7 +135,7 @@ module Scribbler
         # in case we have bad config data lingering
         subject.stub(:respond_to?).with('test_log_log_location').and_return false
         subject.should_not_receive(:test_log_log_location)
-        subject.find_file_at(:test_log).should == 'test_log'
+        subject.find_file_at(:test_log).should == "#{Dir.pwd}/log/test_log"
       end
 
       it "finds a file method defined" do
