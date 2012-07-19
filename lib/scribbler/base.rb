@@ -182,12 +182,14 @@ module Scribbler
     #   # => :another_file    # The method `another_file_log_location` does not exist
     #
     # Returns Nothing
-    #
-    # TODO: allow the log base directory to be set in configurator
     def self.find_file_at(location)
       if location.is_a?(Symbol) or location.is_a?(String)
         real_method = location.to_s + "_log_location"
-        location = respond_to?(real_method) ? send(real_method) : location.to_s
+        if respond_to?(real_method)
+          location = send(real_method)
+        else
+          location = "#{config.log_directory.to_s}/#{location.to_s}"
+        end
       end
       location
     end
