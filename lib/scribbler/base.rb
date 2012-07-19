@@ -160,11 +160,19 @@ module Scribbler
     #
     # Returns Nothing
     def self.apply_to_log(location, options={})
-      if location.present? and options[:message].present?
-        log = File.open(find_file_at(location), 'a')
-        log.puts build_with_template(options)
-        log.close
+      if can_apply_to_log? location, options
+        File.open(find_file_at(location), 'a') do |f|
+          f.puts build_with_template(options)
+        end
       end
+    end
+
+    # TODO: Fix to work with any template
+    def self.can_apply_to_log?(location, options)
+      location.present? and
+        (options[:message].present? or
+         options[:object].present? or
+         options[:custom_fields].present?)
     end
 
     # Attempts to turn a symbol or string into the *_log_location method that
