@@ -27,7 +27,7 @@ Then
 
 You'll find your configuration options in `config/initializers/scribbler.rb`.
 **Better, more documented examples in the template file provided by `scribbler install`**
-As an example, with this configuration file in a Rails app called `Blogger`: {#config}
+As an example, with this configuration file in a Rails app called `Blogger`:
 
     Scribbler::Base.configure do
       config.application_include = true
@@ -87,7 +87,7 @@ Log options with the default template proc:
 
 With the template enabled (either during call to log [:template => true] or by setting to
 be used by default) you will have each log entry wrapped into a template to pretty-up and
-get some more boilerplate data. As you can see in the (config)[#config] above. See method
+get some more boilerplate data. As you can see in the config above. See method
 docs and specs for more information.
 
 ## Todo
@@ -97,3 +97,4 @@ docs and specs for more information.
 * Currently attempts to notify NewRelic if its there, abstract and allow custom services
 * Allow a class to set default options for a log call within itself
 * Allow there to be a log made without the option[:message], in case its all custom_fields or someting
+* Allow event hooks on log call?

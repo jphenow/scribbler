@@ -102,7 +102,8 @@ module Scribbler
     # Returns Nothing.
     def self.log(location, options={})
       options = {
-        :template => config.use_template_by_default
+        :template => config.use_template_by_default,
+        :stack_frame => options[:call_stack] ? Kernel.caller[1..-1] : nil
       }.merge options
       begin
         NewRelic::Agent.notice_error(options[:error]) if options[:error] and options[:new_relic] != false
