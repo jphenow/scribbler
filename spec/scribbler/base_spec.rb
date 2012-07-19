@@ -58,17 +58,17 @@ module Scribbler
       end
 
       it "calls log, skips templater and still works" do
-        Scribbler::Base.send(:build_with_template,
+        subject.send(:build_with_template,
                              :object => some_object,
                              :template => false,
                              :message => "test\n123").should == "test\n123"
       end
 
       it "calls log and gets message with template wrapper" do
-        Scribbler::Base.send(:build_with_template,
-                             :object => some_object,
-                             :template => true,
-                             :message => <<-MSG
+        subject.send(:build_with_template,
+                     :template => true,
+                     :object => some_object,
+                     :message => <<-MSG
         test
         123
         MSG
@@ -83,11 +83,11 @@ module Scribbler
       end
 
       it "calls log and gets message with custom params" do
-        Scribbler::Base.send(:build_with_template,
-                             :template => true,
-                             :object => some_object,
-                             :custom_fields => {:test1 => 1, :test2 => 2},
-                             :message => <<-MSG
+        subject.send(:build_with_template,
+                     :template => true,
+                     :object => some_object,
+                     :custom_fields => {:test1 => 1, :test2 => 2},
+                     :message => <<-MSG
         test
         123
         MSG

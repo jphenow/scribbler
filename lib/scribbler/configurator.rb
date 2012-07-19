@@ -135,8 +135,11 @@ module Scribbler
         template << "#{Time.now}\n"
         template << "#{options[:object].class.name}: #{if_id}\n" if options[:object]
         template << "#{custom_fields}\n" if custom_fields.present?
-        template << "#{options[:message]}\n\n"
+        template << "#{options[:message]}\n"
         template << "Call Stack:\n#{options[:stack_frame].join("\n")}" if options[:call_stack]
+        template << "\n"
+
+        template
       end
     end
   end
