@@ -34,8 +34,6 @@ As an example, with this configuration file in a Rails app called `Blogger`:
 
       # config.log_directory = File.new '/a/better/path'
 
-      config.logs = %w[production delayed_job]
-
       config.use_template_by_default = true # Default: false
 
       # config.template = proc do |options|
