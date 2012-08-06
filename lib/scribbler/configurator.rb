@@ -22,20 +22,6 @@ module Scribbler
                          end
     end
 
-    # List of strings or symbols that represent logs we want methods
-    # generated for
-    #
-    # Default: []
-    #
-    # Examples
-    #
-    # Scribbler::Configurator.logs
-    # # => ['copy', 'destroy']
-    #
-    # Returns list of logs
-    def self.logs
-      @logs ||= []
-    end
 
     # Boolean used for deciding whether or not Scribbler should
     # define #*_log_location methods and a .log method in a rails application

@@ -15,20 +15,6 @@ Scribbler::Base.configure do
   #
   # config.log_directory = File.new '/a/better/path'
   #
-  #
-  # A list of the logs you'd like location methods for. if the logs list
-  # has:
-  #
-  #   ['log1']
-  #
-  # You are afforded a Base.log1_log_location method and you may do:
-  #
-  #   Base.log :log1, ....
-  #
-  # REQUIRED
-  #
-  # config.logs = %w[log1 log2]
-  #
   # This option enables log templating. Each time you log a message you
   # can have it automatically wrapped in some sugar. The default is something
   # like:

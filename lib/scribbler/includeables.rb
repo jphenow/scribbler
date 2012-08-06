@@ -17,29 +17,32 @@ module Scribbler
 
   module Includeables
     extend ActiveSupport::Concern
-
-    included do
-      build_methods
-    end
-
     module ClassMethods
-      def build_methods
-        # Public: defines methods for log location. The first element
-        # defines the prefix for the method so "subseason" = subseason_log_location.
-        # The second element defines the name of the logfile so "subseason" =
-        # root_of_app/log/subseason.log
-        #
-        # Examples
-        #
-        #   subseason_log_location
-        #   # => #<Pathname:/path_to_ngin/log/subseason_copy_structure.log>
-        #
-        # Returns Pathname to log
-        Scribbler::Base.config.logs.each do |value|
-          define_singleton_method "#{value}_log_location" do
-            File.join Scribbler::Configurator.log_directory, "#{value}.log"
-          end
-        end
+      def log_location_regex
+        /(?<file>.*)_log_location$/
+      end
+
+      # Public: defines methods for log location. The first element
+      # defines the prefix for the method so "subseason" = subseason_log_location.
+      # The second element defines the name of the logfile so "subseason" =
+      # root_of_app/log/subseason.log
+      #
+      # Examples
+      #
+      #   subseason_log_location
+      #   # => #<Pathname:/path_to_ngin/log/subseason_copy_structure.log>
+      #
+      # Returns Pathname to log
+      def method_missing(name, *args, &block)
+        (match = name.to_s.match log_location_regex) ? log_at(match[:file]) : super
+      end
+
+      def respond_to?(name)
+        (m = name.to_s.match log_location_regex) ? !!m : super
+      end
+
+      def log_at(file_name)
+        File.join Scribbler::Configurator.log_directory, "#{file_name}.log"
       end
 
       # Public: Save ourselves some repetition. Notifies error to NewRelic

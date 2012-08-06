@@ -64,7 +64,6 @@ module Scribbler
       class_eval(&block)
       Base.include_in_application
       BaseIncluder.include_includeables
-      build_methods
     end
 
     # Simply returns the configurator class.
@@ -162,7 +161,7 @@ module Scribbler
     # Returns Nothing
     def self.apply_to_log(location, options={})
       if can_apply_to_log? location, options
-        File.open(find_file_at(location), 'a') do |f|
+        File.open log_at(location), 'a' do |f|
           f.puts build_with_template(options)
         end
       end
@@ -174,33 +173,6 @@ module Scribbler
         (options[:message].present? or
          options[:object].present? or
          options[:custom_fields].present?)
-    end
-
-    # Attempts to turn a symbol or string into the *_log_location method that
-    # was auto-build based on Configurator.logs and finds the file path
-    #
-    # location  - a string or symbol that will be turned into a *_log_location
-    #             method
-    #
-    # Examples
-    #
-    #   Base.find_file_at :a_file
-    #   # => <#Path:...>      # The method `a_file_log_location` exists
-    #
-    #   Base.find_file_at :another_file
-    #   # => :another_file    # The method `another_file_log_location` does not exist
-    #
-    # Returns Nothing
-    def self.find_file_at(location)
-      if location.is_a?(Symbol) or location.is_a?(String)
-        real_method = location.to_s + "_log_location"
-        if respond_to?(real_method)
-          location = send(real_method)
-        else
-          location = "#{config.log_directory.to_s}/#{location.to_s}"
-        end
-      end
-      location
     end
 
     # If the config agrees, attempt to include our special methods
