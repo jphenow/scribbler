@@ -92,6 +92,7 @@ docs and specs for more information.
 
 * Configure the module/class receiving the include
 * Configurable notification gem (NewRelic, Airbrake, etc.)
+* Have default template cascade through hashes/arrays for prettier viewing
 * Currently attempts to notify NewRelic if its there, abstract and allow custom services
 * Allow a class to set default options for a log call within itself
 * Allow there to be a log made without the option[:message], in case its all custom_fields or someting
