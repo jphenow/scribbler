@@ -98,3 +98,5 @@ docs and specs for more information.
 * Allow a class to set default options for a log call within itself
 * Allow there to be a log made without the option[:message], in case its all custom_fields or someting
 * Allow event hooks on log call?
+* Log4r support
+* Bring class-level methods down to instance methods (More OO)
