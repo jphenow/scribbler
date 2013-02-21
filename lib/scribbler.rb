@@ -17,7 +17,7 @@ module Scribbler
   #
   # Examples:
   #
-  #   Base.configure do
+  #   Scribbler.configure do |config|
   #     config.logs = %w[log1 log2]
   #     config.application_include = true
   #   end
@@ -39,7 +39,7 @@ module Scribbler
   #
   # Returns the singleton configurator
   def self.config
-    @config ||= Scribbler::Configurator.new
+    @config ||= Configurator.new
   end
 
   private
