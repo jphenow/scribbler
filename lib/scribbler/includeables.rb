@@ -2,21 +2,18 @@ module Scribbler
   module Includeables
     extend ActiveSupport::Concern
     included do
-      delegate :log_location_regex,
-        :log_at,
-        to: :magic
-
       delegate :log,
+        :log_at,
         to: :logger
     end
 
     module ClassMethods
-      def magic
-        MagicLocation.new
-      end
-
       def logger
         Logger.new
+      end
+
+      def log_location_regex
+        /(?<file>.*)_log_location$/
       end
 
       # Public: defines methods for log location. The first element

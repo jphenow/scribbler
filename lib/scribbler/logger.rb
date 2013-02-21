@@ -35,7 +35,16 @@ module Scribbler
       apply_to_log location, options
     end
 
+    def log_at(file_name)
+      LogLocation.new.find_path file_name
+    end
+
     private
+
+    def config
+      Scribbler.config
+    end
+
     # Builds the message and any other options into a string
     # using the template defined in the configure
     #

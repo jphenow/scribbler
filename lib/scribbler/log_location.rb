@@ -1,13 +1,10 @@
 module Scribbler
-  class MagicLocation
-    def log_location_regex
-      /(?<file>.*)_log_location$/
-    end
-
-    def log_at(file_name)
+  class LogLocation
+    def find_path(file_name)
       File.join config.log_directory, "#{file_name}.log"
     end
 
+    private
     def config
       Scribbler.config
     end
