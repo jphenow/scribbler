@@ -6,9 +6,13 @@ module Scribbler
     #           :path - changes the path its installing config files too
     #
     def install(options={})
-      install_path = options[:path] || Base.default_install_path
+      install_path = options[:path] || config.default_install_path
       cli.run_command "mkdir -p #{install_path}"
-      cli.mass_copy Base.templates, install_path
+      cli.mass_copy config.templates, install_path
+    end
+
+    def config
+      Scribbler.config
     end
 
     def cli
