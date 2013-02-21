@@ -1,8 +1,7 @@
 require 'spec_helper'
 
 module Scribbler
-  describe CLI do
-    subject { CLI }
+  describe CLIClient do
     let(:cp_command) { 'cp x y' }
     describe '.run_command' do
       it 'calls backtick command with output' do

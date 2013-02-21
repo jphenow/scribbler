@@ -1,5 +1,5 @@
 module Scribbler
-  class CLI
+  class CLIClient
     # Run a shell command and output clean text explaining what happened
     #
     # command   - Shell command to run
@@ -20,7 +20,7 @@ module Scribbler
     #   # => nothing
     #
     # Returns the backtick return of the command
-    def self.run_command(command, poptions={})
+    def run_command(command, poptions={})
       options = {:output => true}.merge(poptions)
       output command if options[:output]
       `#{command}`
@@ -38,7 +38,7 @@ module Scribbler
     #   # => "Output stuff"
     #
     # Returns whatever `puts` command returns
-    def self.say(text)
+    def say(text)
       puts text
     end
 
@@ -55,7 +55,7 @@ module Scribbler
     #   # => Nothing
     #
     # Returns Nothing
-    def self.mass_copy(files, destination)
+    def mass_copy(files, destination)
       output 'cp'
       files.each do |file|
         run_command "cp #{file} #{destination}", :output => false
@@ -80,7 +80,7 @@ module Scribbler
     #   # => "Checking necessary directories are in place"
     #
     # Returns Nothing
-    def self.output(command)
+    def output(command)
       final_out = []
       pieces = command.split(' ')
       case pieces.first
