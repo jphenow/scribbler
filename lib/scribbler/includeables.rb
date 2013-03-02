@@ -2,13 +2,15 @@ module Scribbler
   module Includeables
     extend ActiveSupport::Concern
     included do
-      delegate :log,
-        to: :logger
     end
 
     module ClassMethods
       def logger
         Logger
+      end
+
+      def log(*args)
+        logger.log *args
       end
 
       def log_at(location)
