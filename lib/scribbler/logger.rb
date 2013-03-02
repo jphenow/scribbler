@@ -89,9 +89,15 @@ module Scribbler
     #
     # Returns nil, a string, or a string built with calling the Configurator.template method
     def build_with_template
-      if options[:message].present?
-        options[:message] = options[:message].strip_heredoc.rstrip
-        options[:template] ? config.template.call(options) : options[:message]
+      options[:message] = options[:message].to_s.strip_heredoc.rstrip
+      template.call options
+    end
+
+    def template
+      if options.key?(:template) && options[:template].is_a?(Proc)
+        options[:template]
+      else
+        config.template
       end
     end
 
