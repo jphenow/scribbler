@@ -3,8 +3,13 @@ require 'spec_helper'
 module ::Rails; end
 module Scribbler
   describe Logger do
+    subject { Logger.new location, options }
+    let(:location) { nil }
+    let(:options) { {} }
+    let(:file) { double puts: true }
     before do
       Time.stub :now => "now"
+      File.stub(:open).and_yield(file)
     end
 
     describe "apply to log" do
@@ -18,30 +23,25 @@ module Scribbler
         Scribbler.instance_variable_set "@config", nil
       end
 
-      it "should not work without location" do
-        subject.send(:apply_to_log, nil, :message => "...").should be_nil
+      describe "nil file" do
+        let(:file) { double puts: nil }
+        it "should not work without location" do
+          subject.send(:apply_to_log).should be_nil
+        end
       end
 
-      it "should not work without message" do
-        subject.should_not_receive :test_log_log_location
-        subject.send(:apply_to_log, :test_log).should be_nil
+      describe "no message" do
+        let(:file) { double puts: nil }
+        it "should not work without message" do
+          subject.should_not_receive :test_log_log_location
+          subject.stub location: :test_log
+          subject.send(:apply_to_log).should be_nil
+        end
       end
 
       it "should build a template and try to put it in a file" do
-        options = { :message => "..." }
-        file = mock(:puts => true)
-        subject.should_receive(:build_with_template).with options
-        subject.should_receive(:log_at).with :test_log
-        File.should_receive(:open).and_yield(file)
-        subject.send :apply_to_log, :test_log, options
-      end
-
-      it "doesn't find a file method" do
-        # in case we have bad config data lingering
-        subject.stub(:respond_to?).with('test_log_log_location').and_return false
-        subject.should_not_receive(:test_log_log_location)
-        Rails.should_receive(:root).and_raise(NameError)
-        subject.log_at(:test_log).should == "#{subject.send(:config).log_directory}/test_log.log"
+        subject.stub location: :test_log, options: { message: "..." }
+        subject.send :apply_to_log
       end
     end
 
@@ -58,21 +58,25 @@ module Scribbler
       end
 
       it "calls log, skips templater and still works" do
-        subject.send(:build_with_template,
-                     :object => some_object,
-                     :template => false,
-                     :message => "test\n123").should == "test\n123"
+        subject.stub options: {
+          object: some_object,
+          template: false,
+          message: "test\n123"
+        }
+
+        subject.send(:build_with_template).should == "test\n123"
       end
 
       it "calls log and gets message with template wrapper" do
-        subject.send(:build_with_template,
-                     :template => true,
-                     :object => some_object,
-                     :message => <<-MSG
+        subject.stub options: {
+          template: true,
+          object: some_object,
+          message: <<-MSG
         test
         123
         MSG
-                    ).should == <<-MSG.strip_heredoc
+        }
+        subject.send(:build_with_template).should == <<-MSG.strip_heredoc
         -------------------------------------------------
         now
         SomeObject: no id
@@ -83,15 +87,16 @@ module Scribbler
       end
 
       it "calls log and gets message with custom params" do
-        subject.send(:build_with_template,
-                     :template => true,
-                     :object => some_object,
-                     :custom_fields => {:test1 => 1, :test2 => 2},
-                     :message => <<-MSG
+        subject.stub options: {
+          template: true,
+          object: some_object,
+          custom_fields: { test1: 1, test2: 2 },
+          message: <<-MSG
         test
         123
         MSG
-                    ).should == <<-MSG.strip_heredoc
+        }
+        subject.send(:build_with_template).should == <<-MSG.strip_heredoc
         -------------------------------------------------
         now
         SomeObject: no id

@@ -5,6 +5,16 @@ module Scribbler
     attr_accessor :options
 
     public
+
+    def self.log(location, options = {})
+      new(location, options).log
+    end
+
+    def initialize(location, options = {})
+      self.location = location
+      self.options = gather_log_options options
+    end
+
     # Public: Save ourselves some repetition. Notifies error to NewRelic
     # and drops given string into a given log.
     #
@@ -26,19 +36,16 @@ module Scribbler
     #   log(:subseason, :message => "Logging like a bauss")
     #
     # Returns Nothing.
-    def log(location, options = {})
-      self.location = location
-      self.options = gather_log_options options
+    def log
       notify_new_relic options[:error], options[:new_relic]
-
       apply_to_log
     end
+
+    private
 
     def actual_log_location
       LogLocation.new.find_path location
     end
-
-    private
 
     def notify_new_relic(error, new_relic)
       NewRelic::Agent.notice_error(error) if error and new_relic != false
@@ -103,7 +110,7 @@ module Scribbler
     #
     # Returns Nothing
     def apply_to_log
-      if can_apply_to_log? location, options
+      if can_apply_to_log?
         File.open actual_log_location, 'a' do |f|
           f.puts build_with_template
         end

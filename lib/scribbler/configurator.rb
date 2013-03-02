@@ -59,7 +59,7 @@ module Scribbler
     def log_directory
       @log_directory ||= begin
                            Rails.root.join('log')
-                         rescue NameError
+                         rescue => e
                            File.join Dir.pwd, 'log'
                          end
     end

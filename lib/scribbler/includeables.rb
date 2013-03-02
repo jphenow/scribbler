@@ -3,13 +3,16 @@ module Scribbler
     extend ActiveSupport::Concern
     included do
       delegate :log,
-        :log_at,
         to: :logger
     end
 
     module ClassMethods
       def logger
-        Logger.new
+        Logger
+      end
+
+      def log_at(location)
+        LogLocation.new.find_path location
       end
 
       def log_location_regex

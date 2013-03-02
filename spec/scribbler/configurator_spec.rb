@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+module Rails; end
 module Scribbler
   describe Configurator do
     describe "logs" do
@@ -22,10 +23,17 @@ module Scribbler
     end
 
     describe "log directory" do
+      let(:root_stub) { double }
+      before do
+        Rails.stub :root => root_stub
+      end
+
+      after do
+        Rails.rspec_reset
+      end
+
       it "tries a rails root when Rails defined" do
-        root_stub = stub
         root_stub.should_receive(:join).with 'log'
-        Rails = stub(:root => root_stub)
         subject.log_directory
       end
 
