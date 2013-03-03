@@ -18,7 +18,7 @@ For sanity sake, the version 0.3.0 is the big step towards dropping most of the 
 instances. There isn't much functionality change yet, but it will make expanding the gem much
 simpler to develop.
 
-### Changes
+### Changes For You
 
 `Scribbler::Base` is no more. See `Scribbler`
 
