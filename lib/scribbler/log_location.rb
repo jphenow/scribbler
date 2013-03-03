@@ -1,7 +1,8 @@
+require 'pathname'
 module Scribbler
   class LogLocation
     def find_path(file_name)
-      File.join config.log_directory, "#{file_name}.log"
+      Pathname.new File.join(config.log_directory, "#{file_name}.log")
     end
 
     private
