@@ -94,8 +94,12 @@ module Scribbler
     end
 
     def template
-      if options.key?(:template) && options[:template].is_a?(Proc)
-        options[:template]
+      if options.key?(:template)
+        if options[:template]
+          options[:template].is_a?(Proc) ? options[:template] : config.template
+        else
+          ->(o) { o[:message] }
+        end
       else
         config.template
       end
