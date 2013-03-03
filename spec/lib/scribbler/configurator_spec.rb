@@ -22,6 +22,10 @@ module Scribbler
       end
     end
 
+    describe "default template" do
+      its(:template) { should be_a Proc }
+    end
+
     describe "log directory" do
       let(:root_stub) { double }
       before do
