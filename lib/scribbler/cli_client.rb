@@ -81,15 +81,15 @@ module Scribbler
     #
     # Returns Nothing
     def output(command)
-      final_out = []
-      pieces = command.split(' ')
-      case pieces.first
-      when 'mkdir'
-        final_out << "Checking necessary directories are in place"
-      when 'cp'
-        final_out << "Coping files"
-      end
-      say final_out.join ' '
+      base_command = command.split(' ').first
+      say out_definitions[base_command]
+    end
+
+    def out_definitions
+      Hash.new { |h,k| h[k.to_s] ||= "Running command: #{k}" }.tap { |hash|
+        hash["cp"] = "Coping files"
+        hash["mkdir"] = "Checking necessary directories are in place"
+      }
     end
   end
 end
