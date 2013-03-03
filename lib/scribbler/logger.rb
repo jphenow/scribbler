@@ -93,16 +93,28 @@ module Scribbler
       template.call options
     end
 
-    def template
-      if options.key?(:template)
-        if options[:template]
-          options[:template].is_a?(Proc) ? options[:template] : config.template
-        else
-          ->(o) { o[:message] }
-        end
+    def no_template
+      ->(o) { o[:message] }
+    end
+
+    def decypher_template_option
+      if options[:template]
+        options[:template].is_a?(Proc) ? options[:template] : default_template
       else
-        config.template
+        no_template
       end
+    end
+
+    def template_option_given?
+      options.key?(:template)
+    end
+
+    def default_template
+      config.template
+    end
+
+    def template
+      template_option_given? ? decypher_template_option : default_template
     end
 
     # Drops built message into the log with the given location
