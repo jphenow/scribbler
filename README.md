@@ -11,6 +11,39 @@ Currently it assists in:
 * Centralized log method for file, message, and error checks
   - Currently also able to notify NewRelic, abstraction and extension to come
 
+## Notes on upgrading to 0.3.0
+
+Scribbler was initially written with a lot of class-level (almost entirely) operations.
+For sanity sake, the version 0.3.0 is the big step towards dropping most of the gem into
+instances. There isn't much functionality change yet, but it will make expanding the gem much
+simpler to develop.
+
+### Changes
+
+`Scribbler::Base` is no more. See `Scribler`
+
+`Scribbler.configure` now yields the configurator so you now want to change from:
+
+```ruby
+Scribbler::Base.configure do
+  config.some_config_options
+  # ...
+  # ...
+  # ...
+end
+```
+
+to
+
+```ruby
+Scribbler.configure do |config|
+  config.some_config_options
+  # ...
+  # ...
+  # ...
+end
+```
+
 ## Usage
 
 In your Rails project add
@@ -63,7 +96,7 @@ Blogger.production_log_location
 or
 
 ```ruby
-Scribbler::Base.production_log_location
+Scribbler.production_log_location
 # => <#Path: Rails.root.join('log', 'production.log')>
 ```
 
@@ -72,20 +105,20 @@ More importantly you're given access to a sweet `log` method:
 ```ruby
 # Notifies NewRelic and drops the message in log found at Blogger.production_log_location
 Blogger.log :production, :error => e, :message => "#{e} broke stuff"
-Scribbler::Base.log :production, :error => e, :message => "#{e} broke stuff"
+Scribbler.log :production, :error => e, :message => "#{e} broke stuff"
 
 # Only logs to log/delayed_job.log and doesn't notify NewRelic
 Blogger.log :delayed_job, :message => "Successfully executed Delayed Job"
-Scribbler::Base.log :delayed_job, :message => "Successfully executed Delayed Job"
+Scribbler.log :delayed_job, :message => "Successfully executed Delayed Job"
 
 # Doesn't notify NewRelic but gives the method access to the error and logs the message
 # to the given logfile
 Blogger.log 'production', :new_relic => false, :error => e, :message => "#{e} broke stuff"
-Scribbler::Base.log 'production', :new_relic => false, :error => e, :message => "#{e} broke stuff"
+Scribbler.log 'production', :new_relic => false, :error => e, :message => "#{e} broke stuff"
 
 # Logs to given file without using the fancy log methods
 Blogger.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
-Scribbler::Base.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
+Scribbler.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
 ```
 
 Log options with the default template proc:
