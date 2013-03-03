@@ -4,6 +4,11 @@
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
 require 'scribbler'
 require 'ap'
 require 'active_support/inflector'
