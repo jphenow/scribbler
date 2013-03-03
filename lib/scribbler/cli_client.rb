@@ -26,22 +26,6 @@ module Scribbler
       `#{command}`
     end
 
-    # Central method for outputting text. Will serve
-    # as a central location for changing how Scribbler outputs
-    #
-    # text  - Text to output
-    #
-    # Examples:
-    #
-    #   CLI.say "Output stuff"
-    #   # "Output stuff"
-    #   # => "Output stuff"
-    #
-    # Returns whatever `puts` command returns
-    def say(text)
-      puts text
-    end
-
     # Copy a list of files to one location with one output
     # for the whole copy
     #
@@ -63,6 +47,22 @@ module Scribbler
     end
 
     private
+
+    # Central method for outputting text. Will serve
+    # as a central location for changing how Scribbler outputs
+    #
+    # text  - Text to output
+    #
+    # Examples:
+    #
+    #   CLI.say "Output stuff"
+    #   # "Output stuff"
+    #   # => "Output stuff"
+    #
+    # Returns whatever `puts` command returns
+    def say(text)
+      puts text
+    end
 
     # Get the command and try to output a human description
     # of what's happening
