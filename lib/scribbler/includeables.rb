@@ -1,8 +1,6 @@
 module Scribbler
   module Includeables
     extend ActiveSupport::Concern
-    included do
-    end
 
     module ClassMethods
       def logger
