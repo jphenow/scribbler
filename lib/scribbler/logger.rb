@@ -65,7 +65,9 @@ module Scribbler
     end
 
     # Builds the message and any other options into a string
-    # using the template defined in the configure
+    # using the template defined in the configure.
+    #
+    # NOTE: These "options" come from the instance
     #
     # options   - options hash that comprises most of the important log pieces
     #           :message  - The message we're wrapping into the templater [required]
@@ -74,13 +76,13 @@ module Scribbler
     #
     # Examples
     #
-    #   Base.build_with_template(:message => "...", :template => false)
+    #   build_with_template(:message => "...", :template => false)
     #   # => "..."
     #
-    #   Base.build_with_template
+    #   build_with_template
     #   # => nil
     #
-    #   Base.build_with_template(:message => "...", :template => true)
+    #   build_with_template(:message => "...", :template => true)
     #   # => <<-EXAMPLE
     #     --------------------
     #     TEMPLATE STUFF
@@ -119,11 +121,11 @@ module Scribbler
 
     # Drops built message into the log with the given location
     #
-    # location    - location either found with Base.*_log_location or by hoping a valid
+    # location    - location either found with Scribbler.*_log_location or by hoping a valid
     #               path string or Path object were passed
     # options     - options hash
     #             :message - Message to be built and put in log file [required]
-    #             ** Other hash information given in Base.log
+    #             ** Other hash information given in Scribbler.log
     #
     # Examples
     #

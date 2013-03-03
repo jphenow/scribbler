@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    scribbler (0.2.3)
+    scribbler (0.3.0)
       activesupport
       thor
 

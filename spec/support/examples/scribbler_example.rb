@@ -1,4 +1,4 @@
-Scribbler::Base.configure do
+Scribbler.configure do |config|
   # This is like the Rails configure. This is actually a #class_eval.
   # Unless you'd like to experiment with breaking things and battling dragons,
   # please only use what we document here.

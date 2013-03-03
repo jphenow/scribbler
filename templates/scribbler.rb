@@ -1,4 +1,4 @@
-Scribbler::Base.configure do
+Scribbler.configure do |config|
   # This is like the Rails configure. This is actually a #class_eval.
   # Unless you'd like to experiment with breaking things and battling dragons,
   # please only use what we document here.
@@ -27,14 +27,14 @@ Scribbler::Base.configure do
   # DO PLX FIX                                        #
   #
   # If you would rather this not be default you may set this to false. Keep
-  # in mind, there is an option on the Base.log to enable or disable the
+  # in mind, there is an option on the Scribbler.log to enable or disable the
   # template on a per-call basis. (:template)
   #
   # config.use_template_by_default = true # Default: false
   #
   #
   # Don't like the default template above? Write your own proc here.
-  # The proc is given the options hash that you give to Base.log so you're
+  # The proc is given the options hash that you give to Scribbler.log so you're
   # given plenty of control over what information you have to work with.
   #
   # options   - Hash of options for logging on Ngin

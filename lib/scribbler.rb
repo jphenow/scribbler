@@ -34,7 +34,7 @@ module Scribbler
   #
   # Examples:
   #
-  #   Base.config
+  #   Scribbler.config
   #   # => Scribbler::Configurator
   #
   # Returns the singleton configurator
@@ -49,7 +49,7 @@ module Scribbler
   #
   # Example:
   #
-  #   Base.include_in_application
+  #   Scribbler.include_in_application
   #   # => Nothing
   #
   # Returns Nothing

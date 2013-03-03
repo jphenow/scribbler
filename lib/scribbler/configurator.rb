@@ -6,7 +6,7 @@ module Scribbler
     #
     # Examples:
     #
-    #   Base.gem_path
+    #   Configurator.gem_path
     #   # => '/some/home/.rvm/gems/ruby-1.9.3-p125/gems/scribbler-0.0.1/'
     #
     # Returns String of the current gem's directory path
@@ -18,7 +18,7 @@ module Scribbler
     #
     # Examples:
     #
-    #   Base.templates
+    #   Configurator.templates
     #   # => ['/some/home/.rvm/gems/ruby-1.9.3-p125/gems/scribbler-0.0.1/templates/1.rb',
     #   #     '/some/home/.rvm/gems/ruby-1.9.3-p125/gems/scribbler-0.0.1/templates/2.rb]
     #
@@ -34,7 +34,7 @@ module Scribbler
     #
     # Examples:
     #
-    #   Base.default_install_path
+    #   Configurator.default_install_path
     #   # => '/some/home/projects/rails_app/config/initializers/'
     #
     # Returns String for best guess of a good install path
@@ -83,7 +83,7 @@ module Scribbler
     end
 
     # Boolean for deciding if we should use the logger template by
-    # by default when calling Base.log
+    # by default when calling Scribbler.log
     #
     # Default: false
     #
@@ -98,10 +98,10 @@ module Scribbler
     end
 
     # The method that sets a template for each log made with
-    # Base.log
+    # Scribbler.log
     #
     # The template proc is given the whole options hash that is
-    # passed through Base.log or YourApplication.log. So if you
+    # passed through Scribbler.log or YourApplication.log. So if you
     # had:
     #
     #   YourApplication.log :a_log,
@@ -121,16 +121,16 @@ module Scribbler
     #     "Message: options[:message]"
     #   end
     #
-    # From Scribbler::Base.configure that would be:
+    # From Scribbler.configure that would be:
     #
     #   config.template = proc do |options|
     #     "Message: options[:message]"
     #   end
     #
     # **Keep in mind** that the template can be ignored at any
-    # Base.log call with:
+    # Scribbler.log call with:
     #
-    #   Base.log :your_log, :template => false, :message "..."
+    #   Scribbler.log :your_log, :template => false, :message "..."
     #
     # Default:
     #
