@@ -20,15 +20,13 @@ simpler to develop.
 
 ### Changes
 
-`Scribbler::Base` is no more. See `Scribler`
+`Scribbler::Base` is no more. See `Scribbler`
 
 `Scribbler.configure` now yields the configurator so you now want to change from:
 
 ```ruby
 Scribbler::Base.configure do
   config.some_config_options
-  # ...
-  # ...
   # ...
 end
 ```
@@ -38,8 +36,6 @@ to
 ```ruby
 Scribbler.configure do |config|
   config.some_config_options
-  # ...
-  # ...
   # ...
 end
 ```
