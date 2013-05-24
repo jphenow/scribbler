@@ -65,3 +65,4 @@ module Scribbler
     end
   end
 end
+require 'scribbler/base'
