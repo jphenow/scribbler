@@ -2,6 +2,12 @@ module Scribbler
   class Configurator
     attr_accessor :logs, :application_include, :template, :use_template_by_default, :log_directory
 
+    # USED FOR CONFIGURE BLOCK DEPRECATION
+    def config
+      self
+    end
+    private :config
+
     # Gets the path of this Gem
     #
     # Examples:
