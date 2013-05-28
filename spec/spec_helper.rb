@@ -4,6 +4,11 @@
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
 require 'scribbler'
 require 'ap'
 require 'active_support/inflector'
@@ -11,17 +16,10 @@ require 'active_support/concern'
 Dir.glob(File.expand_path('../support/lib/**/*.rb', __FILE__)).each { |file| require file }
 include SpecUtils
 
-singletons = %w[Base CLI Configurator Executable]
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   config.color = true
-  config.after(:all) do # Force a reset of some Classes
-    project_dir = File.expand_path('../..', __FILE__)
-    singletons.each do |s|
-      Scribbler.send(:remove_const, s)
-      load "#{project_dir}/lib/scribbler/#{s.downcase}.rb"
-    end
-  end
+  config.order = 'random'
 end

@@ -12,77 +12,122 @@ Currently it assists in:
 * Centralized log method for file, message, and error checks
   - Currently also able to notify NewRelic, abstraction and extension to come
 
+## Notes on upgrading to 0.3.0
+
+Scribbler was initially written with a lot of class-level (almost entirely) operations.
+For sanity sake, the version 0.3.0 is the big step towards dropping most of the gem into
+instances. There isn't much functionality change yet, but it will make expanding the gem much
+simpler to develop.
+
+### Changes For You
+
+`Scribbler::Base` is now deprecated, look to remove. See `Scribbler`
+
+`Scribbler.configure` now yields the configurator so you now want to change from:
+
+```ruby
+Scribbler::Base.configure do
+  config.some_config_options
+  # ...
+end
+```
+
+to
+
+```ruby
+Scribbler.configure do |config|
+  config.some_config_options
+  # ...
+end
+```
+
 ## Usage
 
 In your Rails project add
 
-    gem 'scribbler'
+```ruby
+gem 'scribbler'
+```
 
 to your Gemfile and
 
-    bundle install
+```bash
+bundle install
+```
 
 Then
 
-    scribbler install # For options do `scribbler` first
+```bash
+scribbler install # For options do `scribbler` first
+```
 
 You'll find your configuration options in `config/initializers/scribbler.rb`.
 **Better, more documented examples in the template file provided by `scribbler install`**
 As an example, with this configuration file in a Rails app called `Blogger`:
 
-    Scribbler::Base.configure do
-      config.application_include = true
+```ruby
+Scribbler.configure do |config|
+  config.application_include = true
 
-      # config.log_directory = File.new '/a/better/path'
+  # config.log_directory = File.new '/a/better/path'
 
-      config.use_template_by_default = true # Default: false
+  config.use_template_by_default = true # Default: false
 
-      # config.template = proc do |options|
-      #   <<-MSG
-      #   ##########
-      #   Cool template bro!
-      #   Message: #{options[:message]}
-      #   MSG
-      # end
-    end
+  # config.template = proc do |options|
+  #   <<-MSG
+  #   ##########
+  #   Cool template bro!
+  #   Message: #{options[:message]}
+  #   MSG
+  # end
+end
+```
 
 You are given a few methods for free. To get the production logfile location:
 
-    Blogger.production_log_location
-    # => <#Path: Rails.root.join('log', 'production.log')>
+```ruby
+Blogger.production_log_location
+# => <#Path: Rails.root.join('log', 'production.log')>
+```
 
 or
 
-    Scribbler::Base.production_log_location
-    # => <#Path: Rails.root.join('log', 'production.log')>
+```ruby
+Scribbler.production_log_location
+# => <#Path: Rails.root.join('log', 'production.log')>
+```
 
 More importantly you're given access to a sweet `log` method:
 
-    # Notifies NewRelic and drops the message in log found at Blogger.production_log_location
-    Blogger.log :production, :error => e, :message => "#{e} broke stuff"
-    Scribbler::Base.log :production, :error => e, :message => "#{e} broke stuff"
+```ruby
+# Notifies NewRelic and drops the message in log found at Blogger.production_log_location
+Blogger.log :production, :error => e, :message => "#{e} broke stuff"
+Scribbler.log :production, :error => e, :message => "#{e} broke stuff"
 
-    # Only logs to log/delayed_job.log and doesn't notify NewRelic
-    Blogger.log :delayed_job, :message => "Successfully executed Delayed Job"
-    Scribbler::Base.log :delayed_job, :message => "Successfully executed Delayed Job"
+# Only logs to log/delayed_job.log and doesn't notify NewRelic
+Blogger.log :delayed_job, :message => "Successfully executed Delayed Job"
+Scribbler.log :delayed_job, :message => "Successfully executed Delayed Job"
 
-    # Doesn't notify NewRelic but gives the method access to the error and logs the message
-    # to the given logfile
-    Blogger.log 'production', :new_relic => false, :error => e, :message => "#{e} broke stuff"
-    Scribbler::Base.log 'production', :new_relic => false, :error => e, :message => "#{e} broke stuff"
+# Doesn't notify NewRelic but gives the method access to the error and logs the message
+# to the given logfile
+Blogger.log 'production', :new_relic => false, :error => e, :message => "#{e} broke stuff"
+Scribbler.log 'production', :new_relic => false, :error => e, :message => "#{e} broke stuff"
 
-    # Logs to given file without using the fancy log methods
-    Blogger.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
-    Scribbler::Base.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
+# Logs to given file without using the fancy log methods
+Blogger.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
+Scribbler.log File.expand_path(File.join(File.dirname(__FILE__), 'logfile.log')), :message => "#{e} broke stuff"
+```
 
 Log options with the default template proc:
 
-    options   - Hash of options for logging on Ngin
-              :error            - Error object, mostly for passing to NewRelic
-              :message          - Message to log in the actual file [REQUIRED]
-              :custom_fields    - Custom fields dropped into the default template
-              :template         - Whether or not to use the template at this log
-              :new_relic        - Notify NewRelic of the error (default: true)
+```
+# options   - Hash of options for logging on Ngin
+#             :error            - Error object, mostly for passing to NewRelic
+#             :message          - Message to log in the actual file [REQUIRED]
+#             :custom_fields    - Custom fields dropped into the default template
+#             :template         - Whether or not to use the template at this log
+#             :new_relic        - Notify NewRelic of the error (default: true)
+```
 
 With the template enabled (either during call to log [:template => true] or by setting to
 be used by default) you will have each log entry wrapped into a template to pretty-up and

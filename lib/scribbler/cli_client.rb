@@ -1,5 +1,5 @@
 module Scribbler
-  class CLI
+  class CLIClient
     # Run a shell command and output clean text explaining what happened
     #
     # command   - Shell command to run
@@ -20,26 +20,10 @@ module Scribbler
     #   # => nothing
     #
     # Returns the backtick return of the command
-    def self.run_command(command, poptions={})
+    def run_command(command, poptions={})
       options = {:output => true}.merge(poptions)
       output command if options[:output]
       `#{command}`
-    end
-
-    # Central method for outputting text. Will serve
-    # as a central location for changing how Scribbler outputs
-    #
-    # text  - Text to output
-    #
-    # Examples:
-    #
-    #   CLI.say "Output stuff"
-    #   # "Output stuff"
-    #   # => "Output stuff"
-    #
-    # Returns whatever `puts` command returns
-    def self.say(text)
-      puts text
     end
 
     # Copy a list of files to one location with one output
@@ -55,7 +39,7 @@ module Scribbler
     #   # => Nothing
     #
     # Returns Nothing
-    def self.mass_copy(files, destination)
+    def mass_copy(files, destination)
       output 'cp'
       files.each do |file|
         run_command "cp #{file} #{destination}", :output => false
@@ -63,6 +47,22 @@ module Scribbler
     end
 
     private
+
+    # Central method for outputting text. Will serve
+    # as a central location for changing how Scribbler outputs
+    #
+    # text  - Text to output
+    #
+    # Examples:
+    #
+    #   CLI.say "Output stuff"
+    #   # "Output stuff"
+    #   # => "Output stuff"
+    #
+    # Returns whatever `puts` command returns
+    def say(text)
+      puts text
+    end
 
     # Get the command and try to output a human description
     # of what's happening
@@ -80,16 +80,16 @@ module Scribbler
     #   # => "Checking necessary directories are in place"
     #
     # Returns Nothing
-    def self.output(command)
-      final_out = []
-      pieces = command.split(' ')
-      case pieces.first
-      when 'mkdir'
-        final_out << "Checking necessary directories are in place"
-      when 'cp'
-        final_out << "Coping files"
-      end
-      say final_out.join ' '
+    def output(command)
+      base_command = command.split(' ').first
+      say out_definitions[base_command]
+    end
+
+    def out_definitions
+      Hash.new { |h,k| h[k.to_s] ||= "Running command: #{k}" }.tap { |hash|
+        hash["cp"] = "Coping files"
+        hash["mkdir"] = "Checking necessary directories are in place"
+      }
     end
   end
 end

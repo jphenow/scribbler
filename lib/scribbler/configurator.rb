@@ -1,7 +1,55 @@
 module Scribbler
   class Configurator
-    class << self
-      attr_accessor :logs, :application_include, :template, :use_template_by_default, :log_directory
+    attr_accessor :logs, :application_include, :template, :use_template_by_default, :log_directory
+
+    # USED FOR CONFIGURE BLOCK DEPRECATION
+    def config
+      self
+    end
+    private :config
+
+    # Gets the path of this Gem
+    #
+    # Examples:
+    #
+    #   Configurator.gem_path
+    #   # => '/some/home/.rvm/gems/ruby-1.9.3-p125/gems/scribbler-0.0.1/'
+    #
+    # Returns String of the current gem's directory path
+    def gem_path
+      File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
+    end
+
+    # Gets all the paths to the template files in the gem's template directory
+    #
+    # Examples:
+    #
+    #   Configurator.templates
+    #   # => ['/some/home/.rvm/gems/ruby-1.9.3-p125/gems/scribbler-0.0.1/templates/1.rb',
+    #   #     '/some/home/.rvm/gems/ruby-1.9.3-p125/gems/scribbler-0.0.1/templates/2.rb]
+    #
+    # Returns Array of Strings of the gem's template files
+    def templates
+      Dir.glob(File.join(gem_path, 'templates', '*'))
+    end
+
+    # Gets the path to the default install directory. If Rails is present
+    # it will default to the Rails.root/config/initializers/. Otherwise
+    # it assumes its the $PWD/config/initializer. Should look at a cleaner
+    # abstraction of this
+    #
+    # Examples:
+    #
+    #   Configurator.default_install_path
+    #   # => '/some/home/projects/rails_app/config/initializers/'
+    #
+    # Returns String for best guess of a good install path
+    def default_install_path
+      begin
+        ::Rails.root.join 'config', 'initializers', ''
+      rescue NameError
+        File.join Dir.pwd, 'config', 'initializers', ''
+      end
     end
 
     # Provides location for getting the directory Scribbler will place
@@ -14,10 +62,10 @@ module Scribbler
     #   # => "/some/path/to/log/"
     #
     # Returns String for log directory location
-    def self.log_directory
+    def log_directory
       @log_directory ||= begin
                            Rails.root.join('log')
-                         rescue NameError
+                         rescue => e
                            File.join Dir.pwd, 'log'
                          end
     end
@@ -36,12 +84,12 @@ module Scribbler
     # Returns boolean
     #
     # TODO: Allow the class we're sending the include to to be custom
-    def self.application_include
+    def application_include
       @application_include || false
     end
 
     # Boolean for deciding if we should use the logger template by
-    # by default when calling Base.log
+    # by default when calling Scribbler.log
     #
     # Default: false
     #
@@ -51,15 +99,15 @@ module Scribbler
     # # => false
     #
     # Returns boolean
-    def self.use_template_by_default
+    def use_template_by_default
       @use_template_by_default || false
     end
 
     # The method that sets a template for each log made with
-    # Base.log
+    # Scribbler.log
     #
     # The template proc is given the whole options hash that is
-    # passed through Base.log or YourApplication.log. So if you
+    # passed through Scribbler.log or YourApplication.log. So if you
     # had:
     #
     #   YourApplication.log :a_log,
@@ -79,16 +127,16 @@ module Scribbler
     #     "Message: options[:message]"
     #   end
     #
-    # From Scribbler::Base.configure that would be:
+    # From Scribbler.configure that would be:
     #
     #   config.template = proc do |options|
     #     "Message: options[:message]"
     #   end
     #
     # **Keep in mind** that the template can be ignored at any
-    # Base.log call with:
+    # Scribbler.log call with:
     #
-    #   Base.log :your_log, :template => false, :message "..."
+    #   Scribbler.log :your_log, :template => false, :message "..."
     #
     # Default:
     #
@@ -108,7 +156,7 @@ module Scribbler
     #
     # TODO: Block input that would break this
     # TODO: Test
-    def self.template
+    def template
       @template ||= proc do |options|
         begin
           if_id = options[:object].present? ? options[:object].try(:id) : 'no id'
