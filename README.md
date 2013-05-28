@@ -20,7 +20,7 @@ simpler to develop.
 
 ### Changes For You
 
-`Scribbler::Base` is no more. See `Scribbler`
+`Scribbler::Base` is now deprecated, look to remove. See `Scribbler`
 
 `Scribbler.configure` now yields the configurator so you now want to change from:
 
